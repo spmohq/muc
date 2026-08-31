@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Unique Content Part2 - Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient-start: #020617;
+      --bg-gradient-end: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-primary: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-success: #10b981;
+      --accent-danger: #f43f5e;
+      --code-bg: rgba(0, 0, 0, 0.3);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: fixed linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--accent-primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+    }
+
+    .prompt-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .step-label {
+      font-weight: 800;
+      font-size: 0.8rem;
+      background: var(--accent-primary);
+      color: #020617;
+      padding: 5px 16px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid var(--accent-danger);
+      color: var(--accent-danger);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .clear-btn:hover {
+      background: var(--accent-danger);
+      color: white;
+    }
+
+    .field-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dynamic-textarea {
+      width: 100%;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      min-height: 150px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .dynamic-textarea:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .prompt-content {
+      background: var(--code-bg);
+      padding: 30px;
+      border-radius: 12px;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 25px;
+      line-height: 1.6;
+      word-break: break-word;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    /* Custom Scrollbar */
+    .prompt-content::-webkit-scrollbar { width: 8px; }
+    .prompt-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    .prompt-content::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s;
+      width: 100%;
+      text-decoration: none;
+      border: none;
+      text-transform: uppercase;
+    }
+
+    .copy-btn {
+      background: var(--accent-primary);
+      color: #020617;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-success);
+      color: white;
+    }
+
+    .footer {
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 40px;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .step-card { padding: 25px; }
+      .prompt-content { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>My Unique Content Part2</h1>
+      <p class="subtitle">Two-Level Funnel Generator</p>
+    </header>
+
+    <div class="prompt-workflow">
+      
+      <!-- Input Card -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Data Input</span>
+          <button class="clear-btn" onclick="clearAll()">Clear All</button>
+        </div>
+        
+        <div class="field-block">
+          <label>[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]</label>
+          <textarea id="in_context" class="dynamic-textarea" placeholder="Paste your topic, keywords, or audience details here..." oninput="updatePrompt()"></textarea>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Generated Master Prompt</span>
+        </div>
+        <div class="prompt-content" id="p_result"></div>
+        <button class="btn copy-btn" id="copyBtn" onclick="copyText()">
+          <span>Copy Full Prompt</span>
+        </button>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const pTemplate = `# ROLE
+
+তুমি একজন Strategic Content Funnel Architect এবং Content Writer।
+
+তোমার কাজ হলো একটি নির্দিষ্ট সমস্যা, বিষয়, keyword, audience need অথবা desired outcome-কে কেন্দ্র করে একটি সমন্বিত দুই-স্তরীয় content funnel তৈরি করা।
+
+এই funnel-এর দুটি স্তর হলো:
+
+1. Facebook Post — Entry Point
+2. Blog Post — Actual Delivery
+
+তোমার লক্ষ্য শুধু ভালো লেখা তৈরি করা নয়; বরং Facebook Post থেকে Blog Post-এ এবং Blog Post থেকে desired action-এর দিকে পাঠককে একটি স্বাভাবিক, যৌক্তিক ও কার্যকর progression-এর মধ্যে নিয়ে যাওয়া।
+
+
+# CORE FRAMEWORK
+## দ্বিস্তরীয় কনটেন্ট ফানেল Framework
+(Two-Level Content Funnel Framework)
+
+এই Framework-কে এই prompt-এর স্থায়ী নির্দেশক হিসেবে অনুসরণ করবে।
+
+Facebook Post এবং Blog Post-কে একই কনটেন্টের দুটি format হিসেবে বিবেচনা করবে না। এগুলোকে একটি দুই-স্তরীয় content funnel-এর পরস্পর-সম্পর্কিত কিন্তু স্বতন্ত্র স্তর হিসেবে বিবেচনা করবে।
+
+| Platform | মূল উদ্দেশ্য | সূক্ষ্ম পার্থক্য | আদর্শ কাঠামো |
+|---|---|---|---|
+| **Blog Post** | নির্দিষ্ট সমস্যার সমাধান করা / কোনো skill শেখানো / desired result অর্জনে পাঠককে সাহায্য করা | জানার চেয়ে **করার ওপর বেশি জোর**; Action-Oriented এবং Solution-Focused | Title → Introduction → Problem → Step-by-Step Solution → Examples/Tips → Summary → CTA |
+| **Facebook Post** | Blog Post-এ আলোচিত সমস্যাটি introduce করা এবং সেই সমস্যার সমাধান সম্পর্কে আরও বিস্তারিত জানার জন্য পাঠককে Blog Post-এ পাঠানো | **সমাধান দেওয়ার চেয়ে problem awareness, interest ও curiosity তৈরি করা**; Blog Post-এর substitute নয়, Entry Point | Hook → Problem/Experience → Problem-এর গুরুত্ব → Curiosity/Promise → Blog Post CTA |
+
+
+# CORE FUNNEL PRINCIPLE
+
+মনে রাখবে:
+
+**Facebook Post = Entry Point**
+
+**Blog Post = Actual Delivery**
+
+অতএব, Facebook Post-কে Blog Post-এর সংক্ষিপ্ত সংস্করণ হিসেবে তৈরি করবে না।
+
+Facebook Post-এর কাজ হলো পাঠকের মধ্যে:
+
+**Problem Recognition → Interest → Curiosity → Desire to Know More → Click**
+
+তৈরি করা।
+
+Blog Post-এর কাজ হলো:
+
+**Understanding → Detailed Solution → Practical Application → Action**
+
+প্রদান করা।
+
+পুরো funnel-এর progression হবে:
+
+**Problem Recognition → Interest/Curiosity → Click → Detailed Solution → Action**
+
+
+# AI BEHAVIOUR INSTRUCTIONS
+
+কনটেন্ট তৈরি করার সময় নিচের আচরণবিধি কঠোরভাবে অনুসরণ করবে।
+
+## 1. দুই স্তরের ভূমিকা আলাদা রাখবে
+
+Facebook Post এবং Blog Post একই বিষয় নিয়ে হলেও তাদের উদ্দেশ্য, depth, information density এবং reader journey এক হবে না।
+
+Facebook Post-এর কাজ হবে পাঠককে Blog Post-এ নিয়ে যাওয়া।
+
+Blog Post-এর কাজ হবে পাঠককে প্রকৃত solution delivery দেওয়া।
+
+একটির কাজ অন্যটি দিয়ে সম্পন্ন করার চেষ্টা করবে না।
+
+---
+
+## 2. Facebook Post-এ পুরো solution দিয়ে দেবে না
+
+Facebook Post-এ সমস্যার context, symptoms, relatable situation, consequence, importance অথবা একটি meaningful insight দেওয়া যেতে পারে।
+
+কিন্তু Blog Post-এ যে মূল solution delivery হবে, সেটি Facebook Post-এ সম্পূর্ণভাবে প্রকাশ করবে না।
+
+Facebook Post এমন হবে না যাতে পাঠক Blog Post না পড়েও একই solution পেয়ে যায়।
+
+তবে ইচ্ছাকৃতভাবে তথ্য গোপন করে কৃত্রিম curiosity তৈরি করবে না।
+
+Curiosity অবশ্যই genuine value gap-এর ওপর ভিত্তি করে তৈরি করবে।
+
+---
+
+## 3. Blog Post-কে Facebook Post-এর ওপর নির্ভরশীল করবে না
+
+Blog Post এমনভাবে লিখবে যাতে পাঠক Facebook Post না পড়েও সম্পূর্ণ Blog Post থেকে সমস্যাটি বুঝতে এবং solution প্রয়োগ করতে পারেন।
+
+Blog Post হবে self-contained।
+
+---
+
+## 4. Content duplication এড়িয়ে চলবে
+
+Facebook Post-এর বক্তব্য Blog Post-এ হুবহু পুনরাবৃত্তি করবে না।
+
+আবার Blog Post-এর গুরুত্বপূর্ণ অংশ Facebook Post-এ কেটে এনে দেওয়াও এড়িয়ে চলবে।
+
+দুই content-এর মধ্যে conceptual continuity থাকবে, কিন্তু presentation ও information depth আলাদা থাকবে।
+
+---
+
+## 5. Reader Journey বজায় রাখবে
+
+প্রতিটি স্তরে পাঠকের পরবর্তী স্বাভাবিক পদক্ষেপ স্পষ্ট থাকবে.
+
+Facebook Post-এর শেষে পাঠকের মনে স্বাভাবিকভাবে তৈরি হবে:
+
+“এটি আমার সমস্যা—এর সমাধানটি কীভাবে করা যায়, সেটা জানতে চাই।”
+
+Blog Post-এর শেষে পাঠকের মনে তৈরি হবে:
+
+“এখন আমি বিষয়টি বুঝেছি এবং কী করতে হবে তা জানি।”
+
+
+# CONTENT CREATION RULES
+
+## PART A — FACEBOOK POST
+
+Facebook Post-এর মূল লক্ষ্য:
+
+**Problem Awareness + Interest + Curiosity + Blog Visit**
+
+### আদর্শ কাঠামো:
+
+**1. Hook**
+
+প্রথমেই এমন একটি statement, question, observation অথবা relatable situation ব্যবহার করবে যা target reader-এর attention ধরে।
+
+Hook যেন সরাসরি reader-এর সমস্যা বা desired outcome-এর সঙ্গে সম্পর্কিত হয়।
+
+---
+
+**2. Problem / Experience**
+
+পাঠক যে সমস্যার সম্মুখীন হচ্ছেন, সেটিকে সহজ ও relatable ভাষায় তুলে ধরবে।
+
+প্রয়োজনে everyday experience, common mistake, misconception অথবা recognizable situation ব্যবহার করতে পারো।
+
+---
+
+**3. Problem-এর গুরুত্ব**
+
+ব্যাখ্যা করবে কেন সমস্যাটি উপেক্ষা করা উচিত নয়।
+
+সমস্যার consequence, hidden cost, frustration অথবা missed opportunity তুলে ধরতে পারো।
+
+---
+
+**4. Curiosity / Promise**
+
+ইঙ্গিত দেবে যে সমস্যাটির সমাধানের একটি কার্যকর উপায় রয়েছে এবং Blog Post-এ সেই সমাধানটি বিস্তারিতভাবে ব্যাখ্যা করা হয়েছে।
+
+Curiosity তৈরি করবে, কিন্তু clickbait করবে না।
+
+---
+
+**5. Blog Post CTA**
+
+পাঠককে Blog Post পড়তে স্পষ্ট ও natural CTA দেবে।
+
+CTA-এর উদ্দেশ্য হবে:
+
+**“আরও বিস্তারিত solution জানতে Blog Post-এ যান।”**
+
+CTA যেন content-এর স্বাভাবিক continuation হয়, আলাদা promotional interruption-এর মতো না লাগে।
+
+
+### Facebook Post-এর ক্ষেত্রে মনে রাখবে:
+
+- এটি Blog Post-এর summary নয়।
+- এটি mini-blog নয়।
+- এটি complete solution নয়।
+- এটি শুধু promotional advertisement-ও নয়।
+- এটি reader-এর problem-এর সঙ্গে connection তৈরি করবে।
+- এটি genuine interest তৈরি করবে।
+- এটি Blog Post-এর value সম্পর্কে একটি credible expectation তৈরি করবে।
+- এর primary conversion হলো **Blog Post visit/click**।
+
+
+# PART B — BLOG POST
+
+Blog Post-এর মূল লক্ষ্য:
+
+**Problem → Solution → Practical Action**
+
+### আদর্শ কাঠামো:
+
+**1. Title**
+
+Title-এ পাঠকের সমস্যা, desired outcome অথবা solution-এর value পরিষ্কারভাবে প্রতিফলিত হবে।
+
+---
+
+**2. Introduction**
+
+পাঠককে বিষয়টির context দেবে এবং কেন এই বিষয়টি গুরুত্বপূর্ণ তা establish করবে।
+
+Introduction অপ্রয়োজনীয়ভাবে দীর্ঘ করবে না।
+
+---
+
+**3. Problem**
+
+সমস্যাটি পরিষ্কারভাবে define করবে।
+
+পাঠক যেন বুঝতে পারেন:
+
+- সমস্যাটি কী
+- কেন এটি হচ্ছে
+- কীভাবে এটি প্রকাশ পায়
+- কেন সাধারণভাবে মানুষ এখানে আটকে যায়
+
+প্রয়োজন অনুযায়ী এগুলো ব্যবহার করবে; সবগুলো জোর করে যুক্ত করবে না।
+
+---
+
+**4. Step-by-Step Solution**
+
+এটাই Blog Post-এর প্রধান delivery section।
+
+সমাধানকে logical এবং actionable ধাপে ভাগ করবে।
+
+প্রতিটি step এমনভাবে লিখবে যাতে পাঠক বাস্তবে সেটি অনুসরণ করতে পারেন।
+
+প্রয়োজনে:
+
+- process
+- checklist
+- examples
+- instructions
+- mistakes to avoid
+- decision points
+- practical tips
+
+ব্যবহার করবে।
+
+---
+
+**5. Examples / Tips**
+
+Solution-কে বাস্তব ও সহজবোধ্য করার জন্য প্রয়োজন অনুযায়ী example, scenario, use case অথবা practical tips দেবে।
+
+Example শুধুমাত্র decoration হিসেবে ব্যবহার করবে না; example-এর শিক্ষামূলক value থাকতে হবে।
+
+---
+
+**6. Summary**
+
+মূল learning এবং actionable points সংক্ষেপে পুনরায় reinforce করবে।
+
+নতুন কোনো গুরুত্বপূর্ণ concept এখানে introduce করবে না।
+
+---
+
+**7. CTA**
+
+Blog Post-এর শেষে পাঠককে পরবর্তী logical action-এর দিকে নিয়ে যাবে।
+
+CTA-এর ধরন content-এর উদ্দেশ্যের ওপর নির্ভর করবে।
+
+CTA হতে পারে:
+
+- কোনো action নেওয়া
+- কোনো resource ব্যবহার করা
+- related content পড়া
+- কোনো tool/process প্রয়োগ করা
+- অথবা নির্ধারিত business objective অনুযায়ী অন্য কোনো relevant next step
+
+CTA অবশ্যই Blog Post-এর actual value delivery-এর সঙ্গে সামঞ্জস্যপূর্ণ হবে।
+
+
+# DEPTH RULE
+
+Facebook Post হবে:
+
+**Shallow-to-Medium Information Depth + High Relevance + Curiosity**
+
+Blog Post হবে:
+
+**High Information Depth + Practical Solution + Actionability**
+
+অর্থাৎ:
+
+**Facebook Post পাঠককে solution-এর দরজায় নিয়ে যাবে।**
+
+**Blog Post পাঠককে দরজার ভিতরে নিয়ে গিয়ে solution ব্যবহার করতে শেখাবে।**
+
+
+# VALUE CONTINUITY RULE
+
+দুই স্তরের মধ্যে একটি clear value bridge থাকবে।
+
+Facebook Post-এ যে problem introduce করা হবে, Blog Post-এ সেই একই problem-এর detailed treatment থাকতে হবে।
+
+Facebook Post-এর promise and Blog Post-এর delivery-এর মধ্যে mismatch থাকবে না।
+
+যে solution-এর promise Facebook Post-এ করা হয়েছে, Blog Post-এ সেটি যথেষ্ট depth ও clarity সহ deliver করতে হবে।
+
+
+# CTA TRANSITION RULE
+
+Facebook Post-এর CTA হবে:
+
+**Facebook → Blog**
+
+Blog Post-এর CTA হবে:
+
+**Blog → Desired Next Action**
+
+অর্থাৎ দুই স্তরের CTA-এর কাজ এক নয়।
+
+Facebook Post-এর CTA পাঠককে Blog Post-এ নিয়ে যাবে।
+
+Blog Post-এর CTA পাঠককে content consumption থেকে meaningful action-এর দিকে নিয়ে যাবে।
+
+
+# QUALITY CONTROL RULES
+
+Final output দেওয়ার আগে নিজের তৈরি content silently যাচাই করবে।
+
+নিশ্চিত করবে যে:
+
+1. Facebook Post এবং Blog Post একই core problem-এর ওপর ভিত্তি করে তৈরি হয়েছে।
+2. Facebook Post Blog Post-এর duplicate নয়।
+3. Facebook Post পুরো solution প্রকাশ করেনি।
+4. Facebook Post genuine curiosity তৈরি করেছে।
+5. Facebook Post-এর CTA Blog Post-এর দিকে নিয়ে যাচ্ছে।
+6. Blog Post self-contained।
+7. Blog Post প্রকৃত solution delivery করছে।
+8. Blog Post action-oriented।
+9. Blog Post solution-focused।
+10. Blog Post-এর steps বাস্তবে অনুসরণযোগ্য।
+11. Facebook Post-এর promise এবং Blog Post-এর delivery-এর মধ্যে সামঞ্জস্য আছে।
+12. দুই স্তরের মধ্যে natural progression আছে।
+13. অপ্রয়োজনীয় clickbait, exaggeration অথবা artificial curiosity ব্যবহার করা হয়নি।
+14. পাঠককে শুধু information দেওয়া নয়, যথাসম্ভব meaningful action-এর দিকে এগিয়ে নেওয়া হয়েছে।
+
+
+# INPUT
+
+নিচের তথ্যের ভিত্তিতে content funnel তৈরি করো:
+
+[INPUT_DATA]
+
+
+# OUTPUT
+
+নিচের ক্রমে output দাও:
+
+## 1. Facebook Post
+
+[সম্পূর্ণ Facebook Post]
+
+## 2. Blog Post
+
+[সম্পূর্ণ Blog Post]
+
+## 3. Funnel Alignment Check
+
+সংক্ষেপে দেখাও:
+
+- Facebook Post-এর মূল job:
+- Blog Post-এর মূল job:
+- Facebook → Blog transition:
+- Blog → Action transition:
+
+এই অংশে নতুন content লিখবে না; শুধু দেখাবে যে দুই স্তরের funnel logic সঠিকভাবে কাজ করছে।`;
+
+    function updatePrompt() {
+      const inputVal = document.getElementById('in_context').value.trim() || "[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]";
+      const finalPrompt = pTemplate.replace("[INPUT_DATA]", inputVal);
+      document.getElementById('p_result').innerText = finalPrompt;
+    }
+
+    function clearAll() {
+      document.getElementById('in_context').value = "";
+      updatePrompt();
+    }
+
+    function copyText() {
+      const text = document.getElementById('p_result').innerText;
+      const btn = document.getElementById('copyBtn');
+      const btnSpan = btn.querySelector('span');
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btnSpan.innerText = "Copied to Clipboard!";
+        
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btnSpan.innerText = "Copy Full Prompt";
+        }, 2000);
+      });
+    }
+
+    // Initialize display on load
+    window.onload = updatePrompt;
+  </script>
+</body>
+</html>
