@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Two Images - Prompt Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient-start: #020617;
+      --bg-gradient-end: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-primary: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-success: #10b981;
+      --code-bg: rgba(0, 0, 0, 0.3);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: fixed linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 850px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--accent-primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+    }
+
+    .prompt-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .step-label {
+      font-weight: 800;
+      font-size: 0.8rem;
+      background: var(--accent-primary);
+      color: #020617;
+      padding: 5px 16px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .prompt-content {
+      background: var(--code-bg);
+      padding: 30px;
+      border-radius: 12px;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 25px;
+      line-height: 1.6;
+      word-break: break-word;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    /* Custom Scrollbar */
+    .prompt-content::-webkit-scrollbar { width: 8px; }
+    .prompt-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    .prompt-content::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+      width: 100%;
+      text-decoration: none;
+      border: none;
+      text-transform: uppercase;
+    }
+
+    .copy-btn {
+      background: rgba(34, 211, 238, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-primary);
+      color: #020617;
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-success);
+      border-color: var(--accent-success);
+      color: white;
+    }
+
+    .footer {
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 40px;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .step-card { padding: 25px; }
+      .prompt-content { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Two Images</h1>
+      <p class="subtitle">Visual Asset Creation Suite</p>
+    </header>
+
+    <div class="prompt-workflow">
+      
+      <!-- Prompt #1 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #1: Feature Image (16:9)</span>
+        </div>
+        <div class="prompt-content" id="p1">অনুগ্রহ করে চূড়ান্ত প্রকাশযোগ্য Blog post-টিকে visual reference হিসেবে নিয়ে Blog post-টির জন্য একটি 16:9 landscape feature image তৈরি করে দাও।</div>
+        <button class="btn copy-btn" onclick="copyText('p1', this)">
+          <span>Copy Prompt #1</span>
+        </button>
+      </div>
+
+      <!-- Prompt #2 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #2: Social Media Graphic (4:5)</span>
+        </div>
+        <div class="prompt-content" id="p2">Based on the image you just created and the ready to blog-post directly above in this conversation, generate one best-and-final finished image that visually represents that content. Treat the content already in this conversation as the complete source of truth. Don't ask me to repeat, paste, or restate the content idea, title, description, audience, topic, or strategic direction. Do not give me an image prompt, concept, explanation, variation set, or design notes. Generate the actual image.
+
+PRIMARY JOB: Create one jaw-dropping social-media graphic that makes people stop scrolling and want to read the content. The image should capture the strongest idea, mechanism, distinction, tension, or payoff from the finished content and translate it into a visually unforgettable graphic.
+
+FORMAT: Generate the image in a 4:5 portrait format optimized for social media and mobile viewing. It should feel natively suited for platforms like Facebook, Instagram, LinkedIn, and X while remaining easy to read on a phone.
+
+VISUAL STANDARD: Make it feel premium, polished, bold, modern, high-contrast, and emotionally compelling. It should look like a high-end editorial social graphic or premium promotional poster, not a generic template, low-effort quote card, cheesy stock image, or cluttered infographic. Use strong composition, clear visual hierarchy, clean spacing, dramatic depth, and a central focal point that instantly communicates the core idea.
+
+TEXT USAGE: Keep on-image text minimal and powerful. Use the exact content title as the main headline unless a shorter version is needed for visual impact, in which case preserve the meaning. You may add one short supporting line if it strengthens the image, but keep the total text tight, readable, and mobile-friendly. The text must be crisp, prominent, and easy to read on a phone.
+
+CREATIVE DIRECTION: Build the visual around a compelling metaphor, scene, object, or dramatic visual situation that expresses the idea rather than merely decorating it. If the content suggests a strong before-versus-after contrast, tension, hidden mistake, overlooked opportunity, or diagnostic insight, show that visually. If a human figure helps, use one. If a symbolic or object-based concept is stronger, use that instead. Make the image feel intelligent and emotionally charged, not random.
+
+DESIGN RULES:
+- Make it instantly attention-grabbing in a crowded feed
+- Favor one dominant idea over clutter or too many elements
+- Use bold typography with excellent contrast and spacing
+- Keep the layout clean and easy to scan on mobile
+- Avoid tiny text, weak contrast, generic icons, bland backgrounds, and obvious stock-photo energy
+- Don't include logos, watermarks, fake UI screenshots, or unnecessary platform branding
+- Don't turn it into a busy step-by-step infographic unless the content absolutely demands it
+- The final image must feel like something a serious marketer would immediately post
+
+FINAL OUTPUT RULE: Return only the finished image. Don't return text commentary, image prompts, captions, explanations, or multiple options unless needed internally to complete the image generation. The goal is one freaking stunning finished image.</div>
+        <button class="btn copy-btn" onclick="copyText('p2', this)">
+          <span>Copy Prompt #2</span>
+        </button>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    function copyText(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerText = "Copied to Clipboard!";
+        btn.classList.add('copied');
+        
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
