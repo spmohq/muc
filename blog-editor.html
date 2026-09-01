@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog's HTML Editor - Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient-start: #020617;
+      --bg-gradient-end: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-primary: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-success: #10b981;
+      --accent-danger: #f43f5e;
+      --code-bg: rgba(0, 0, 0, 0.3);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: fixed linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 850px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--accent-primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    .prompt-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .step-label {
+      font-weight: 800;
+      font-size: 0.8rem;
+      background: var(--accent-primary);
+      color: #020617;
+      padding: 5px 16px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid var(--accent-danger);
+      color: var(--accent-danger);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .clear-btn:hover {
+      background: var(--accent-danger);
+      color: white;
+    }
+
+    .input-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .field-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dynamic-textarea {
+      width: 100%;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 15px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      min-height: 80px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .dynamic-textarea:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .prompt-content {
+      background: var(--code-bg);
+      padding: 30px;
+      border-radius: 12px;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 25px;
+      line-height: 1.6;
+      word-break: break-all;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar Styling */
+    .prompt-content::-webkit-scrollbar { width: 8px; }
+    .prompt-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    .prompt-content::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+      width: 100%;
+      text-decoration: none;
+      border: none;
+    }
+
+    .copy-btn {
+      background: rgba(34, 211, 238, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-primary);
+      color: #020617;
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-success);
+      border-color: var(--accent-success);
+      color: white;
+    }
+
+    .footer {
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 40px;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .step-card { padding: 25px; }
+      .prompt-content { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Blog's HTML Editor</h1>
+      <p class="subtitle">Clean Text Copy System</p>
+    </header>
+
+    <div class="prompt-workflow">
+      
+      <!-- Inputs Card -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Dynamic Input Fields</span>
+          <button class="clear-btn" onclick="clearAll()">Clear All</button>
+        </div>
+        
+        <div class="input-grid">
+          <div class="field-block">
+            <label>[Sub-title]</label>
+            <textarea id="in_subtitle" class="dynamic-textarea" placeholder="Paste sub-title here..." oninput="updatePrompts()"></textarea>
+          </div>
+          
+          <div class="field-block">
+            <label>[TEXT of blockquote]</label>
+            <textarea id="in_blockquote" class="dynamic-textarea" placeholder="Paste blockquote text here..." oninput="updatePrompts()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Prompt Boxes -->
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #1</span></div>
+        <div class="prompt-content" id="p1">height="427"</div>
+        <button class="btn copy-btn" onclick="copyText('p1', this)"><span>Copy Prompt #1</span></button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #2</span></div>
+        <div class="prompt-content" id="p2">width="728"</div>
+        <button class="btn copy-btn" onclick="copyText('p2', this)"><span>Copy Prompt #2</span></button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #3</span></div>
+        <div class="prompt-content" id="p3"></div>
+        <button class="btn copy-btn" onclick="copyText('p3', this)"><span>Copy Prompt #3</span></button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #4</span></div>
+        <div class="prompt-content" id="p4">&lt;details id="post-toc-wrapper" open=""&gt;
+  &lt;summary&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/summary&gt;
+  &lt;div id="post-toc"&gt;&lt;/div&gt;
+&lt;/details&gt;
+
+&lt;div style="padding-bottom: 20px;"&gt;&amp;nbsp;&lt;/div&gt;</div>
+        <button class="btn copy-btn" onclick="copyText('p4', this)"><span>Copy Prompt #4</span></button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #5</span></div>
+        <div class="prompt-content" id="p5">&lt;/blockquote&gt;&lt;div style="padding-bottom: 20px;"&gt;&lt;/div&gt;</div>
+        <button class="btn copy-btn" onclick="copyText('p5', this)"><span>Copy Prompt #5</span></button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #6</span></div>
+        <div class="prompt-content" id="p6"></div>
+        <button class="btn copy-btn" onclick="copyText('p6', this)"><span>Copy Prompt #6</span></button>
+      </div>
+
+      <!-- PROMPT 7: ESCAPED FOR RAW TEXT VISIBILITY -->
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #7</span></div>
+        <div class="prompt-content" id="p7">&lt;div style="margin-top: 50px; padding: 25px; background-color: #f7fafc; border-top: 3px solid #22c55e; border-radius: 8px; text-align: center;"&gt;
+  &lt;p style="font-size: 16px; color: #4a5568; margin-top: 0; margin-bottom: 25px;"&gt;কোনও সমস্যা হচ্ছে? কোনও প্রশ্ন আছে? &lt;br /&gt;যেকোনো সাহায্যের জন্য আমাদের সাপোর্ট টিমের সাথে WhatsApp-এ কানেক্ট করুন 👇&lt;/p&gt;
+  &lt;button onclick="var p='919647496123',m=encodeURIComponent('Re: Support'),a='whatsapp://send?phone='+p+'&amp;text='+m,w='https://wa.me/'+p+'?text='+m;window.location.href=a;setTimeout(function(){window.open(w,'_blank')},1500);" onmouseout="this.style.backgroundColor='#22c55e'" onmouseover="this.style.backgroundColor='#16a34a'" style="background-color: #22c55e; color: white; padding: 12px 24px; border: none; border-radius: 9999px; cursor: pointer; font-size: 16px; font-weight: 600; display: inline-flex; align-items: center; transition: background-color 0.3s;"&gt;&lt;span style="margin-right: 8px; font-size: 20px; line-height: 1;"&gt;💬&lt;/span&gt; WhatsApp Support&lt;/button&gt;
+&lt;/div&gt;
+&lt;div style="padding-bottom: 40px;"&gt;&amp;nbsp;&lt;/div&gt;</div>
+        <button class="btn copy-btn" onclick="copyText('p7', this)"><span>Copy Prompt #7</span></button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-label">Prompt #8</span></div>
+        <div class="prompt-content" id="p8">style="text-align: left;"</div>
+        <button class="btn copy-btn" onclick="copyText('p8', this)"><span>Copy Prompt #8</span></button>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    function updatePrompts() {
+      const subTitle = document.getElementById('in_subtitle').value.trim() || "[Sub-title]";
+      const blockquoteText = document.getElementById('in_blockquote').value.trim() || "[TEXT of blockquote]";
+
+      // Update Prompt 3
+      document.getElementById('p3').innerText = `<p><strong>${subTitle}</strong></p>`;
+
+      // Update Prompt 6
+      document.getElementById('p6').innerText = `<blockquote style="background-color: #e6f4ea; padding: 20px; border-left: 5px solid #81c784; border-radius: 6px; font-size: 16px; line-height: 1.6; margin: 20px 0;">\n<p><strong>${blockquoteText}</strong></p>\n</blockquote>\n<div style="padding-bottom: 20px;">&nbsp;</div>`;
+    }
+
+    function clearAll() {
+      document.getElementById('in_subtitle').value = "";
+      document.getElementById('in_blockquote').value = "";
+      updatePrompts();
+    }
+
+    function copyText(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<span>Copied to Clipboard!</span>`;
+        btn.classList.add('copied');
+        
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Initialize display on load
+    window.onload = updatePrompts;
+  </script>
+</body>
+</html>
