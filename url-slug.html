@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL Slug Generator - Prompt Genie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient-start: #020617;
+      --bg-gradient-end: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-primary: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-success: #10b981;
+      --accent-danger: #f43f5e;
+      --code-bg: rgba(0, 0, 0, 0.3);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: fixed linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 850px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .prompt-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .step-label {
+      font-weight: 800;
+      font-size: 0.8rem;
+      background: var(--accent-primary);
+      color: #020617;
+      padding: 5px 16px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid var(--accent-danger);
+      color: var(--accent-danger);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .clear-btn:hover {
+      background: var(--accent-danger);
+      color: white;
+    }
+
+    label {
+      display: block;
+      color: var(--accent-primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    .dynamic-textarea {
+      width: 100%;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      padding: 18px;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      min-height: 100px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .dynamic-textarea:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .prompt-content {
+      background: var(--code-bg);
+      padding: 30px;
+      border-radius: 12px;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 25px;
+      line-height: 1.6;
+      word-break: break-word;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar Styling */
+    .prompt-content::-webkit-scrollbar { width: 8px; }
+    .prompt-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    .prompt-content::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+      width: 100%;
+      text-decoration: none;
+      border: none;
+    }
+
+    .copy-btn {
+      background: rgba(34, 211, 238, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-primary);
+      color: #020617;
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-success);
+      border-color: var(--accent-success);
+      color: white;
+    }
+
+    .footer {
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 40px;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .step-card { padding: 25px; }
+      .prompt-content { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>English/Roman-letter URL slug</h1>
+    </header>
+
+    <div class="prompt-workflow">
+      
+      <!-- Input Card -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Data Input</span>
+          <button class="clear-btn" onclick="clearInput()">Clear</button>
+        </div>
+        <label for="blogTitleInput">[এখানে বাংলা Blog Title দিন]</label>
+        <textarea id="blogTitleInput" class="dynamic-textarea" placeholder="আপনার বাংলা ব্লগের টাইটেলটি এখানে পেস্ট করুন..." oninput="updatePrompt()"></textarea>
+      </div>
+
+      <!-- Result Card -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Generated Prompt</span>
+        </div>
+        <div class="prompt-content" id="p1"></div>
+        <button class="btn copy-btn" onclick="copyText('p1', this)">
+          <span>Copy Full Prompt</span>
+        </button>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const template = `আপনি একজন SEO-friendly URL Slug Generator হিসেবে কাজ করবেন।
+
+আমি আপনাকে একটি বাংলা ব্লগ পোস্টের Title দেব। আপনার কাজ হলো সেই বাংলা Title থেকে একটি পরিষ্কার, সংক্ষিপ্ত, readable এবং SEO-friendly URL slug তৈরি করা।
+
+মূল নিয়ম
+
+1. বাংলা শব্দগুলিকে English/Roman letters-এ **transliterate** করবেন।
+2. বাংলা শব্দের অর্থ English-এ **translate করবেন না**।
+3. বাংলা উচ্চারণ যতটা সম্ভব স্বাভাবিকভাবে Roman letters-এ প্রকাশ করবেন।
+4. প্রতিটি শব্দ lowercase-এ লিখবেন।
+5. শব্দগুলোর মধ্যে শুধুমাত্র hyphen \`-\` ব্যবহার করবেন।
+6. কোনো space, underscore \`_\`, slash \`/\`, punctuation বা special character ব্যবহার করবেন না।
+7. অপ্রয়োজনীয় শব্দ বাদ দেবেন না, যদি না সেগুলি URL-কে অস্বাভাবিকভাবে দীর্ঘ করে।
+8. URL slug যেন Title-এর মূল অর্থ ও বিষয় স্পষ্টভাবে বোঝায়।
+9. Transliteration হবে Bengali pronunciation অনুযায়ী, English translation অনুযায়ী নয়।
+10. URL slug-এর শুরু বা শেষে hyphen থাকবে না।
+11. একই শব্দের transliteration-এ consistency বজায় রাখবেন।
+12. URL slug যতটা সম্ভব ছোট, পরিষ্কার এবং human-readable রাখবেন।
+13. শুধুমাত্র final URL slug output করবেন। কোনো explanation, quotation mark বা অতিরিক্ত text দেবেন না।
+
+उदाहरण
+
+Title:
+অঙ্ক বুঝতে এত সমস্যা হয় কেন?
+
+Output:
+onk-bujhte-eto-somossha-hoy-keno
+
+Title:
+ভগ্নাংশ আসলে কী এবং কীভাবে বুঝবেন?
+
+Output:
+vognangsho-asole-ki-ebong-kivabe-bujhben
+
+Title:
+ছাত্ররা অঙ্কে বারবার একই ভুল করে কেন?
+
+Output:
+chatrara-onke-barbar-ekoi-bhul-kore-keno
+
+এখন নিচের বাংলা Blog Title-এর জন্য URL slug তৈরি করুন:
+
+[এখানে বাংলা Blog Title দিন]`;
+
+    function updatePrompt() {
+      const userInput = document.getElementById('blogTitleInput').value.trim() || "[এখানে বাংলা Blog Title দিন]";
+      const finalPrompt = template.replace("[এখানে বাংলা Blog Title দিন]", userInput);
+      document.getElementById('p1').innerText = finalPrompt;
+    }
+
+    function clearInput() {
+      document.getElementById('blogTitleInput').value = "";
+      updatePrompt();
+    }
+
+    function copyText(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<span>Copied to Clipboard!</span>`;
+        btn.classList.add('copied');
+        
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Initialize display on load
+    window.onload = updatePrompt;
+  </script>
+</body>
+</html>
