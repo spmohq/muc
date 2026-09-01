@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finalize Blog Post - Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient-start: #020617;
+      --bg-gradient-end: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-primary: #22d3ee;
+      --accent-hover: #67e8f9;
+      --accent-success: #10b981;
+      --code-bg: rgba(0, 0, 0, 0.3);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: fixed linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--accent-primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+    }
+
+    .prompt-workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .step-label {
+      font-weight: 800;
+      font-size: 0.8rem;
+      background: var(--accent-primary);
+      color: #020617;
+      padding: 5px 16px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .prompt-content {
+      background: var(--code-bg);
+      padding: 30px;
+      border-radius: 12px;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 25px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    /* Custom Scrollbar */
+    .prompt-content::-webkit-scrollbar { width: 8px; }
+    .prompt-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    .prompt-content::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s;
+      width: 100%;
+      text-decoration: none;
+      border: none;
+      text-transform: uppercase;
+    }
+
+    .copy-btn {
+      background: rgba(34, 211, 238, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-primary);
+      color: #020617;
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-success);
+      border-color: var(--accent-success);
+      color: white;
+    }
+
+    .footer {
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 40px;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .step-card { padding: 25px; }
+      .prompt-content { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Finalize Blog Post</h1>
+      <p class="subtitle">Content Editing & Quality Assurance Engine</p>
+    </header>
+
+    <div class="prompt-workflow">
+      
+      <!-- Prompt #1 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #1</span>
+        </div>
+        <div class="prompt-content" id="p1">এই ব্লগ পোস্ট প্রকাশের আগে ভাষা, যুক্তি, পুনরাবৃত্তি, গঠন এবং পাঠযোগ্যতা যাচাই করার একটি সংক্ষিপ্ত সম্পাদনা-তালিকা তৈরি করুন।</div>
+        <button class="btn copy-btn" onclick="copyText('p1', this)">Copy Prompt #1</button>
+      </div>
+
+      <!-- Prompt #2 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #2</span>
+        </div>
+        <div class="prompt-content" id="p2">উপরের ব্লগ পোস্টে কোন কোন বক্তব্য, উদাহরণ বা বাক্যাংশ পুনরাবৃত্ত হয়েছে তা সংক্ষেপে চিহ্নিত করে দিন এবং প্রতিটির জন্য সংক্ষিপ্ত করার পরামর্শ দিন।</div>
+        <button class="btn copy-btn" onclick="copyText('p2', this)">Copy Prompt #2</button>
+      </div>
+
+      <!-- Prompt #3 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #3</span>
+        </div>
+        <div class="prompt-content" id="p3">উপরের পুনরাবৃত্ত অংশগুলো ছেঁটে ব্লগ পোস্টের একটি সংক্ষিপ্ত, প্রকাশযোগ্য খসড়া তৈরি করুন।</div>
+        <button class="btn copy-btn" onclick="copyText('p3', this)">Copy Prompt #3</button>
+      </div>
+
+      <!-- Prompt #4 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #4</span>
+        </div>
+        <div class="prompt-content" id="p4">এই ব্লগ পোস্টের জন্য ভাষা, যুক্তি, গঠন, পুনরাবৃত্তি ও পাঠযোগ্যতা যাচাইয়ের এক পাতার প্রকাশনা-চেকলিস্ট তৈরি করুন।</div>
+        <button class="btn copy-btn" onclick="copyText('p4', this)">Copy Prompt #4</button>
+      </div>
+
+      <!-- Prompt #5 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #5</span>
+        </div>
+        <div class="prompt-content" id="p5">এই এক পাতার প্রকাশনা-চেকলিস্টটি একটি পরিষ্কার, সম্পাদনাযোগ্য বাংলা নথি হিসেবে সাজিয়ে দিন, যাতে প্রতিটি ঘর টিক দেওয়া যায় এবং মুদ্রণেও ভালো দেখায়।</div>
+        <button class="btn copy-btn" onclick="copyText('p5', this)">Copy Prompt #5</button>
+      </div>
+
+      <!-- Prompt #6 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #6</span>
+        </div>
+        <div class="prompt-content" id="p6">এই চেকলিস্টে লেখকের নাম, প্রকাশের তারিখ, সংস্করণ এবং চূড়ান্ত অনুমোদনের জন্য আলাদা ঘর যোগ করে একটি আপডেটেড সম্পাদনাযোগ্য বাংলা নথি তৈরি করুন।</div>
+        <button class="btn copy-btn" onclick="copyText('p6', this)">Copy Prompt #6</button>
+      </div>
+
+      <!-- Prompt #7 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #7</span>
+        </div>
+        <div class="prompt-content" id="p7">এক পাতার সম্পাদনা-চেকলিস্টটা অনুসরণ করে প্রকাশযোগ্য খসড়াটিকে চূড়ান্ত প্রকাশযোগ্য ব্লগ পোস্ট পুনর্লিখুন</div>
+        <button class="btn copy-btn" onclick="copyText('p7', this)">Copy Prompt #7</button>
+      </div>
+
+      <!-- Prompt #8 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #8</span>
+        </div>
+        <div class="prompt-content" id="p8">এই ব্লগ পোস্টটি প্রকাশনার জন্য আরও সংক্ষিপ্ত, পুনরাবৃত্তিমুক্ত এবং পাঠযোগ্য করে একটি চূড়ান্ত সম্পাদিত সংস্করণ দিন।</div>
+        <button class="btn copy-btn" onclick="copyText('p8', this)">Copy Prompt #8</button>
+      </div>
+
+      <!-- Prompt #9 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #9</span>
+        </div>
+        <div class="prompt-content" id="p9">এই ব্লগ পোস্টের বানান, যতিচিহ্ন, বাক্যগঠন এবং পুনরাবৃত্তি পরীক্ষা করে শুধু প্রয়োজনীয় সংশোধনসহ একটি পরিষ্কার চূড়ান্ত সংস্করণ দিন।</div>
+        <button class="btn copy-btn" onclick="copyText('p9', this)">Copy Prompt #9</button>
+      </div>
+
+      <!-- Prompt #10 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-label">Prompt #10</span>
+        </div>
+        <div class="prompt-content" id="p10">এই চূড়ান্ত ব্লগ পোস্টটি প্রকাশনা-উপযোগী ফরম্যাটে সাজিয়ে দিন—শিরোনাম, উপশিরোনাম, অনুচ্ছেদ, বুলেট, টেবিল এবং উদ্ধৃতিগুলোর সামঞ্জস্যপূর্ণ বিন্যাসসহ।</div>
+        <button class="btn copy-btn" onclick="copyText('p10', this)">Copy Prompt #10</button>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    function copyText(id, btn) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "Copied to Clipboard!";
+        btn.classList.add('copied');
+        
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
